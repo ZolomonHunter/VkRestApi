@@ -8,9 +8,8 @@ namespace VkRestApi.Models
     public class UserGroup
     {
         public enum GroupCodes {Admin, User}
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("id")]
-        public ulong Id { get; set; }
+        public int Id { get; set; }
         [Required]
         [Column("code")]
         public GroupCodes Code { get; set; }

@@ -5,9 +5,8 @@ namespace VkRestApi.Models
 {
     public class User
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("id")]
-        public ulong Id { get; set; }
+        public int Id { get; set; }
         [Required]
         [Column("login")]
         public string Login { get; set; }
@@ -16,9 +15,15 @@ namespace VkRestApi.Models
         public string Password { get; set; }
         [Column("created_date")]
         public DateTime CreatedDate { get; set; }
+
+        [ForeignKey("UserGroup")]
         [Column("user_group_id")]
+        public int UserGroupId { get; set; }
         public UserGroup UserGroup { get; set; }
+
+        [ForeignKey("UserState")]
         [Column("user_state_id")]
+        public int UserStateId { get; set; }
         public UserState UserState { get; set; }
 
 

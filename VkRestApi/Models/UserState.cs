@@ -7,9 +7,8 @@ namespace VkRestApi.Models
     public class UserState
     {
         public enum StateCodes { Active, Blocked }
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("id")]
-        public ulong Id { get; set; }
+        public int Id { get; set; }
         [Required]
         [Column("code")]
         public StateCodes Code { get; set; }
