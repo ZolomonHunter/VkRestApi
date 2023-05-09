@@ -119,13 +119,33 @@ namespace VkRestApi.Controllers
             else return NoContent();
         }
 
-        // Getting Users from DB
+        // Getting all Users from DB
         // Blocked Users do not return 
         [HttpGet("GetAll")]
         public async Task<ActionResult> GetAll()
         {
             return new JsonResult(await _context.Users.Include("UserGroup").Include("UserState")
                 .Where(user => user.UserState.Code == UserStateEnum.ACTIVE)
+                .ToListAsync());
+        }
+
+        // Getting all Users from DB with pages of 25
+        // Blocked Users do not return
+        // Pages indexed from 1
+        [HttpGet("GetAllByPagination/{page}")]
+        public async Task<ActionResult> GetAllByPagination(int page)
+        {
+            const int PAGE_OFFSET = 25;
+
+            // Check for wrong arg
+            if (page < 1)
+                return BadRequest();
+
+            return new JsonResult(await _context.Users.Include("UserGroup").Include("UserState")
+                .OrderBy(u => u.Id)
+                .Where(user => user.UserState.Code == UserStateEnum.ACTIVE)
+                .Skip(PAGE_OFFSET * (page - 1))
+                .Take(PAGE_OFFSET)
                 .ToListAsync());
         }
 
