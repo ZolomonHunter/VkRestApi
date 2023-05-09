@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.Internal;
+using System.Diagnostics;
 using VkRestApi.Data;
 using VkRestApi.Models;
 
@@ -26,9 +28,17 @@ namespace VkRestApi.Controllers
         [HttpPost]
         public async Task<ActionResult> Post(User user)
         {
-            // TODO 5sec, collission
+            // Marking the time
+            Stopwatch stopwatch = Stopwatch.StartNew();
+
             user.Id = 0;
             user.CreatedDate = DateTime.Now.ToUniversalTime();
+            await _context.Users.AddAsync(user);
+
+            // Managing collisions
+            if (_context.Users.Include("UserState")
+                .Any(u => u.Login == user.Login && u.UserState.Code == UserStateEnum.ACTIVE))
+                return BadRequest();
 
             // Managing UserState
             if (user.UserState == null)
@@ -51,20 +61,29 @@ namespace VkRestApi.Controllers
                 user.UserGroup.Description ??= "";
             }
 
-            // If there are any Active Admins it is BadRequest
+            // Check if there are any Active Admins
             if (user.UserGroup.Code == UserGroupEnum.ADMIN)
             {
                 if (_context.Users.Include("UserGroup").Include("UserState")
-                    .Where(u => u.UserGroup.Code == UserGroupEnum.ADMIN && u.UserState.Code == UserStateEnum.ACTIVE)
-                    .Any())
-                    return BadRequest();
+                    .Any(u => u.UserGroup.Code == UserGroupEnum.ADMIN && u.UserState.Code == UserStateEnum.ACTIVE))
+                    return BadRequest(user);
             }
 
-            await _context.Users.AddAsync(user);
+            try
+            {
+                await Task.Delay(5000 - (int)stopwatch.ElapsedMilliseconds);
+            }
+            catch (ArgumentOutOfRangeException e) { }
+
+            // Check if User with the same Login is pending or already added to DB
+            if (_context.ChangeTracker.Entries<User>().Any(u => u.Entity.Login == user.Login && u.Entity.CreatedDate != user.CreatedDate))
+                return BadRequest();
+            if (_context.Users.Any(u => u.Login == user.Login))
+                return BadRequest();
+
             await _context.SaveChangesAsync();
             return new JsonResult(user);
         }
-
         
         // Getting Users from DB
         // Blocked Users do not return 
