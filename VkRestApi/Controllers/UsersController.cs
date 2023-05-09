@@ -129,7 +129,7 @@ namespace VkRestApi.Controllers
                 .ToListAsync());
         }
 
-        // Getting all Users from DB with pages of 25
+        // Getting Users from DB with pages of 25
         // Blocked Users do not return
         // Pages indexed from 1
         [HttpGet("GetAllByPagination/{page}")]
@@ -142,13 +142,11 @@ namespace VkRestApi.Controllers
                 return BadRequest();
 
             return new JsonResult(await _context.Users.Include("UserGroup").Include("UserState")
-                .OrderBy(u => u.Id)
                 .Where(user => user.UserState.Code == UserStateEnum.ACTIVE)
                 .Skip(PAGE_OFFSET * (page - 1))
                 .Take(PAGE_OFFSET)
                 .ToListAsync());
         }
-
 
         // Soft deleting Users
         // Deleted User's State becomes Blocked
