@@ -13,6 +13,13 @@ namespace VkRestApi.Models
         [Column("code")]
         public StateCodes Code { get; set; }
         [Column("description")]
-        public string? Description { get; set; }
+        public string Description { get; set; }
+
+        public UserState()
+        {
+            Id = 0;
+            Code = StateCodes.Active;
+            Description = "";
+        }
     }
 }

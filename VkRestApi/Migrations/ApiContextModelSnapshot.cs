@@ -76,6 +76,7 @@ namespace VkRestApi.Migrations
                         .HasColumnName("code");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("description");
 
@@ -98,6 +99,7 @@ namespace VkRestApi.Migrations
                         .HasColumnName("code");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("description");
 

@@ -12,7 +12,7 @@ using VkRestApi.Data;
 namespace VkRestApi.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    [Migration("20230508213552_InitialMigration")]
+    [Migration("20230509012203_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -79,6 +79,7 @@ namespace VkRestApi.Migrations
                         .HasColumnName("code");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("description");
 
@@ -101,6 +102,7 @@ namespace VkRestApi.Migrations
                         .HasColumnName("code");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("description");
 

@@ -14,6 +14,13 @@ namespace VkRestApi.Models
         [Column("code")]
         public GroupCodes Code { get; set; }
         [Column("description")]
-        public string? Description { get; set; }
+        public string Description { get; set; }
+
+        public UserGroup()
+        {
+            Id = 0;
+            Code = GroupCodes.User;
+            Description = "";
+        }
     }
 }
