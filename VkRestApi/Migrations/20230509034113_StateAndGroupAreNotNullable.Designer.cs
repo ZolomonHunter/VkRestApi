@@ -12,8 +12,8 @@ using VkRestApi.Data;
 namespace VkRestApi.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    [Migration("20230509012203_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20230509034113_StateAndGroupAreNotNullable")]
+    partial class StateAndGroupAreNotNullable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -74,8 +74,9 @@ namespace VkRestApi.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Code")
-                        .HasColumnType("integer")
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("text")
                         .HasColumnName("code");
 
                     b.Property<string>("Description")
@@ -97,8 +98,9 @@ namespace VkRestApi.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Code")
-                        .HasColumnType("integer")
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("text")
                         .HasColumnName("code");
 
                     b.Property<string>("Description")

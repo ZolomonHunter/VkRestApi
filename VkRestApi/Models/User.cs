@@ -19,12 +19,12 @@ namespace VkRestApi.Models
         [ForeignKey("UserGroup")]
         [Column("user_group_id")]
         public int UserGroupId { get; set; }
-        public UserGroup? UserGroup { get; set; }
+        public UserGroup UserGroup { get; set; }
 
         [ForeignKey("UserState")]
         [Column("user_state_id")]
         public int UserStateId { get; set; }
-        public UserState? UserState { get; set; }
+        public UserState UserState { get; set; }
 
 
     }

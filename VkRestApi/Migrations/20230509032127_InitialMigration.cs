@@ -18,7 +18,7 @@ namespace VkRestApi.Migrations
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    code = table.Column<int>(type: "integer", nullable: false),
+                    code = table.Column<string>(type: "text", nullable: false),
                     description = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
@@ -32,7 +32,7 @@ namespace VkRestApi.Migrations
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    code = table.Column<int>(type: "integer", nullable: false),
+                    code = table.Column<string>(type: "text", nullable: false),
                     description = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
