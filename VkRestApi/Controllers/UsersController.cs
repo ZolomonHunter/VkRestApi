@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query.Internal;
+using Microsoft.Extensions.Caching.Memory;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using VkRestApi.Data;
 using VkRestApi.Models;
 
@@ -13,10 +13,12 @@ namespace VkRestApi.Controllers
     public class UsersController : ControllerBase
     {
         private readonly ApiContext _context;
+        private readonly IMemoryCache _memoryCache;
 
-        public UsersController(ApiContext apiContext)
+        public UsersController(ApiContext apiContext, IMemoryCache memoryCache)
         {
             _context = apiContext;
+            _memoryCache = memoryCache;
         }
 
 
@@ -28,6 +30,13 @@ namespace VkRestApi.Controllers
         [HttpPost]
         public async Task<ActionResult> Post(User user)
         {
+            // Caching pending User's Logins
+            // If User with the same Login already send POST, request will be denied
+            if (_memoryCache.TryGetValue(user.Login, out byte temp))
+                return BadRequest();
+            else
+                _memoryCache.Set<byte>(user.Login, 0, TimeSpan.FromMinutes(1));
+            
             // Marking the time
             Stopwatch stopwatch = Stopwatch.StartNew();
 
@@ -36,9 +45,9 @@ namespace VkRestApi.Controllers
             await _context.Users.AddAsync(user);
 
             // Managing collisions
-            if (_context.Users.Include("UserState")
-                .Any(u => u.Login == user.Login && u.UserState.Code == UserStateEnum.ACTIVE))
-                return BadRequest();
+            if (await _context.Users.Include("UserState")
+                .AnyAsync(u => u.Login == user.Login && u.UserState.Code == UserStateEnum.ACTIVE))
+                return removeFromCacheAndReturn(user, BadRequest());
 
             // Managing UserState
             if (user.UserState == null)
@@ -49,7 +58,7 @@ namespace VkRestApi.Controllers
                 user.UserState.Code = UserStateEnum.ACTIVE;
                 user.UserState.Description ??= "";
             }
-
+            
             // Managing UserGroup
             if (user.UserGroup == null)
                 user.UserGroup = new UserGroup();
@@ -64,26 +73,30 @@ namespace VkRestApi.Controllers
             // Check if there are any Active Admins
             if (user.UserGroup.Code == UserGroupEnum.ADMIN)
             {
-                if (_context.Users.Include("UserGroup").Include("UserState")
-                    .Any(u => u.UserGroup.Code == UserGroupEnum.ADMIN && u.UserState.Code == UserStateEnum.ACTIVE))
-                    return BadRequest(user);
+                if (await _context.Users.Include("UserGroup").Include("UserState")
+                    .AnyAsync(u => u.UserGroup.Code == UserGroupEnum.ADMIN && u.UserState.Code == UserStateEnum.ACTIVE))
+                    return removeFromCacheAndReturn(user, BadRequest());
             }
 
+            // wait remaining time
             try
             {
                 await Task.Delay(5000 - (int)stopwatch.ElapsedMilliseconds);
             }
             catch (ArgumentOutOfRangeException e) { }
 
-            // Check if User with the same Login is pending or already added to DB
-            if (_context.ChangeTracker.Entries<User>().Any(u => u.Entity.Login == user.Login && u.Entity.CreatedDate != user.CreatedDate))
-                return BadRequest();
-            if (_context.Users.Any(u => u.Login == user.Login))
-                return BadRequest();
-
+            
             await _context.SaveChangesAsync();
-            return new JsonResult(user);
+            return removeFromCacheAndReturn(user, new JsonResult(user));
         }
+
+        // Post method must remove cached Login before responding
+        private ActionResult removeFromCacheAndReturn(User user, ActionResult result)
+        {
+            _memoryCache.Remove(user.Login);
+            return result;
+        }
+
         
         // Getting Users from DB
         // Blocked Users do not return 
