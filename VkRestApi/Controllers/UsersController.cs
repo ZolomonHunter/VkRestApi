@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using System.Diagnostics;
@@ -8,6 +9,7 @@ using VkRestApi.Models;
 
 namespace VkRestApi.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
@@ -97,9 +99,9 @@ namespace VkRestApi.Controllers
             return result;
         }
 
-        
+
         // Getting Users from DB
-        // Blocked Users do not return 
+        // Blocked Users do not return
         [HttpGet("{id}")]
         public async Task<ActionResult> Get(int id)
         {
@@ -120,7 +122,7 @@ namespace VkRestApi.Controllers
         }
 
         // Getting all Users from DB
-        // Blocked Users do not return 
+        // Blocked Users do not return
         [HttpGet("GetAll")]
         public async Task<ActionResult> GetAll()
         {

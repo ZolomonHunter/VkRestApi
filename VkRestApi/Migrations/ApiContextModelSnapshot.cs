@@ -59,7 +59,7 @@ namespace VkRestApi.Migrations
 
                     b.HasIndex("UserStateId");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("VkRestApi.Models.UserGroup", b =>
@@ -83,7 +83,7 @@ namespace VkRestApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserGroups");
+                    b.ToTable("UserGroups", (string)null);
                 });
 
             modelBuilder.Entity("VkRestApi.Models.UserState", b =>
@@ -107,7 +107,7 @@ namespace VkRestApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserStates");
+                    b.ToTable("UserStates", (string)null);
                 });
 
             modelBuilder.Entity("VkRestApi.Models.User", b =>
