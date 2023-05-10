@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32922.545
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VkRestApi", "VkRestApi\VkRestApi.csproj", "{2E73A905-6B71-426E-8A8E-37DB41BD1556}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VkRestApi", "VkRestApi\VkRestApi.csproj", "{2E73A905-6B71-426E-8A8E-37DB41BD1556}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiTest", "ApiTest\ApiTest.csproj", "{48D7EEDE-026E-4831-9E39-1ECAA40B8144}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{2E73A905-6B71-426E-8A8E-37DB41BD1556}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E73A905-6B71-426E-8A8E-37DB41BD1556}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2E73A905-6B71-426E-8A8E-37DB41BD1556}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48D7EEDE-026E-4831-9E39-1ECAA40B8144}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48D7EEDE-026E-4831-9E39-1ECAA40B8144}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48D7EEDE-026E-4831-9E39-1ECAA40B8144}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48D7EEDE-026E-4831-9E39-1ECAA40B8144}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

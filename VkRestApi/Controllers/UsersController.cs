@@ -85,7 +85,7 @@ namespace VkRestApi.Controllers
             {
                 await Task.Delay(5000 - (int)stopwatch.ElapsedMilliseconds);
             }
-            catch (ArgumentOutOfRangeException e) { }
+            catch (ArgumentOutOfRangeException) { }
 
             
             await _context.SaveChangesAsync();

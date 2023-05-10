@@ -26,6 +26,15 @@ namespace VkRestApi.Models
         public int UserStateId { get; set; }
         public UserState UserState { get; set; }
 
-
+        public User()
+        {
+            Id = 0;
+            Login = "Default";
+            Password = "Default";
+            UserGroupId = 0;
+            UserStateId = 0;
+            UserGroup = new();
+            UserState = new();
+        }
     }
 }

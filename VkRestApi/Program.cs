@@ -23,8 +23,7 @@ builder.Services.AddSwaggerGen(c =>
     // Configuring swagger auth header
     c.AddSecurityDefinition("Basic", new OpenApiSecurityScheme
     {
-        Description = "Basic auth added to authorization header," +
-        "Default login and password: \"admin:admin\"",
+        Description = "Basic auth, Default login and password: \"admin:admin\"",
         Name = "Authorization",
         In = ParameterLocation.Header,
         Scheme = "basic",

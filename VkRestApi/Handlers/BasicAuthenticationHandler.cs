@@ -45,8 +45,6 @@ namespace VkRestApi.Handlers
             }
             else
                 return AuthenticateResult.Fail(FailureMessage);
-
-            return AuthenticateResult.Fail("Error happened");
         }
     }
 }
